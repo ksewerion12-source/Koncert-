@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Nieprzespane noce</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: black;
+    color: white;
+    overflow: hidden;
+}
+
+.scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-position: center;
+    background-size: cover;
+    filter: brightness(0.3) contrast(1.2);
+    transition: 2s;
+}
+
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 40%, black 100%);
+}
+
+/* 🔥 ŚWIATŁA */
+.light {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.light.active {
+    opacity: 1;
+    animation: lightsMove 3s infinite alternate ease-in-out;
+}
+
+@keyframes lightsMove {
+    0% {
+        transform: translate(-5%, -5%) scale(1);
+        background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 40%);
+    }
+    50% {
+        transform: translate(5%, 3%) scale(1.1);
+        background: radial-gradient(circle, rgba(255,0,100,0.08), transparent 45%);
+    }
+    100% {
+        transform: translate(-3%, 6%) scale(1.05);
+        background: radial-gradient(circle, rgba(0,150,255,0.08), transparent 40%);
+    }
+}
+
+/* BUTTONY */
+.btn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid white;
+    color: white;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+#sitBtn { bottom: 120px; }
+#startBtn { bottom: 60px; display: none; }
+
+/* TEKST */
+.text {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    opacity: 0;
+    transition: 1.5s;
+    padding: 0 20px;
+}
+
+/* AUDIO */
+audio {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="scene" id="scene">
+    <div class="overlay"></div>
+
+    <div class="light" id="light"></div>
+
+    <div class="text" id="text">
+        Zajmij miejsce...
+    </div>
+
+    <button class="btn" id="sitBtn" onclick="sit()">Usiądź</button>
+    <button class="btn" id="startBtn" onclick="startConcert()">Start koncertu</button>
+</div>
+
+<!-- 🎧 TU WKŁADASZ SWÓJ MP3 -->
+<audio id="music" src="NIEPRZESPANE NOCE.mp3"></audio>
+
+<script>
+
+// 🔥 SCENY (TU MOŻESZ PODMIENIĆ LINKI)
+const emptyScene = "https://kadzielniakielce.pl/wp-content/uploads/2020/03/amiteatr-kadzielnia-scena.jpg";
+const fullScene = "https://www.ebilet.pl/media/cms/media/26007/kielce_amfiteatr_kadzielnia_01_l.webp";
+
+const scene = document.getElementById("scene");
+scene.style.backgroundImage = `url(${emptyScene})`;
+
+let text = document.getElementById("text");
+let music = document.getElementById("music");
+
+function sit() {
+    scene.style.backgroundImage = `url(${fullScene})`;
+    scene.style.filter = "brightness(0.8)";
+
+    document.getElementById("sitBtn").style.display = "none";
+    document.getElementById("startBtn").style.display = "block";
+
+    text.style.opacity = 1;
+    text.innerHTML = "Dobrze... możesz zostać na chwilę";
+}
+
+function startConcert() {
+
+    document.getElementById("startBtn").style.display = "none";
+
+    // 🔥 światła
+    document.getElementById("light").classList.add("active");
+
+    // 🎧 START MUZYKI MP3
+    music.play();
+    music.volume = 0;
+
+    // 🔥 FADE IN
+    let fade = setInterval(() => {
+        if (music.volume < 1) {
+            music.volume += 0.05;
+        } else {
+            clearInterval(fade);
+        }
+    }, 150);
+
+    text.innerHTML = "Specjalnie dla Ciebie...";
+
+    setTimeout(() => {
+        text.innerHTML = " powtórzą ten koncert";
+    }, 4000);
+
+    setTimeout(() => {
+        text.innerHTML = "ale tym razem bez tłumu i deszczu";
+    }, 9000);
+
+    setTimeout(() => {
+        text.innerHTML = "tylko Ty i scena";
+    }, 14000);
+
+    setTimeout(() => {
+        text.innerHTML = "Nieprzespane noce";
+    }, 19000);
+}
+
+</script>
+
+</body>
+</html>
